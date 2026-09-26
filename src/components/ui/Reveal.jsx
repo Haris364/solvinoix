@@ -1,0 +1,91 @@
+import { motion } from 'framer-motion'
+import { useReducedMotion } from '../../lib/useReducedMotion'
+import { cn } from '../../lib/cn'
+
+const EASE = [0.16, 1, 0.3, 1]
+
+/**
+ * Scroll-triggered reveal. Children animate from a short offset with a fast
+ * ease; when the visitor prefers reduced motion the content renders as-is.
+ */
+export function Reveal({ children, delay = 0, y = 18, className, as = 'div', once = true }) {
+  const reduceMotion = useReducedMotion()
+  const Component = motion[as] ?? motion.div
+
+  if (reduceMotion) {
+    const Static = as
+    return <Static className={className}>{children}</Static>
+  }
+
+  return (
+    <Component
+      className={className}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once, margin: '-64px' }}
+      transition={{ duration: 0.5, delay, ease: EASE }}
+    >
+      {children}
+    </Component>
+  )
+}
+
+/** Staggered container: children using <RevealItem> cascade automatically. */
+export function RevealGroup({ children, className, stagger = 0.07, delay = 0 }) {
+  const reduceMotion = useReducedMotion()
+
+  if (reduceMotion) return <div className={className}>{children}</div>
+
+  return (
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: '-64px' }}
+      variants={{
+        hidden: {},
+        show: { transition: { staggerChildren: stagger, delayChildren: delay } },
+      }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+export function RevealItem({ children, className, y = 20 }) {
+  const reduceMotion = useReducedMotion()
+
+  if (reduceMotion) return <div className={className}>{children}</div>
+
+  return (
+    <motion.div
+      className={className}
+      variants={{
+        hidden: { opacity: 0, y },
+        show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+      }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+/** Section shell: consistent vertical rhythm and optional id anchoring. */
+export function Section({ id, children, className, tone = 'base' }) {
+  const tones = {
+    base: '',
+    raised: 'bg-ink-900/40 border-y border-line-soft',
+    sunken: 'bg-ink-950',
+  }
+
+  return (
+    <section
+      id={id}
+      className={cn('scroll-mt-20 border-line-soft py-20 sm:py-24 lg:py-32', tones[tone], className)}
+    >
+      {children}
+    </section>
+  )
+}
+
+export default Reveal
