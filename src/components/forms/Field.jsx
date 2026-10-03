@@ -24,10 +24,10 @@ export function Field({
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-[0.8125rem] font-medium text-fog-200">
+      <label htmlFor={id} className="text-sm font-semibold text-fog-200">
         {label}
         {required ? (
-          <span className="ml-1 text-signal-400" aria-hidden="true">
+          <span className="font-semibold ml-1 text-accent" aria-hidden="true">
             *
           </span>
         ) : null}
@@ -45,7 +45,7 @@ export function Field({
         aria-invalid={error ? 'true' : undefined}
         aria-describedby={describedBy || undefined}
         className={cn(
-          'h-11 w-full rounded-lg border bg-ink-900/80 px-3.5 text-sm text-fog-50',
+          'h-11 w-full rounded-lg border bg-ink-900/80 px-3.5 font-semibold text-[0.9375rem] text-fog-50',
           'placeholder:text-fog-600 transition-colors duration-200',
           'focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal-400',
           error ? 'border-red-400/60' : 'border-line hover:border-fog-600',
@@ -53,13 +53,13 @@ export function Field({
       />
 
       {hint && !error ? (
-        <p id={hintId} className="text-xs text-fog-600">
+        <p id={hintId} className="font-semibold text-sm text-fog-600">
           {hint}
         </p>
       ) : null}
 
       {error ? (
-        <p id={errorId} className="text-xs text-red-300">
+        <p id={errorId} className="font-semibold text-sm text-red-300">
           {error}
         </p>
       ) : null}

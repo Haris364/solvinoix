@@ -52,13 +52,26 @@ export function RevealGroup({ children, className, stagger = 0.07, delay = 0 }) 
   )
 }
 
-export function RevealItem({ children, className, y = 20 }) {
+/**
+ * A staggered child of <RevealGroup>.
+ *
+ * `as` exists for lists. Wrapping an <li> in an animated <div> produces
+ * `ol > div > li`, which is invalid markup and drops the list semantics a screen
+ * reader relies on. Pass `as="li"` and the item's own classes so the animation
+ * lands on the list element itself.
+ */
+export function RevealItem({ children, className, y = 20, as = 'div' }) {
   const reduceMotion = useReducedMotion()
 
-  if (reduceMotion) return <div className={className}>{children}</div>
+  if (reduceMotion) {
+    const Static = as
+    return <Static className={className}>{children}</Static>
+  }
+
+  const Component = motion[as] ?? motion.div
 
   return (
-    <motion.div
+    <Component
       className={className}
       variants={{
         hidden: { opacity: 0, y },
@@ -66,7 +79,7 @@ export function RevealItem({ children, className, y = 20 }) {
       }}
     >
       {children}
-    </motion.div>
+    </Component>
   )
 }
 

@@ -4,22 +4,22 @@ import { cn } from '../../lib/cn'
 
 const variants = {
   primary:
-    'bg-signal-400 text-ink-950 hover:bg-signal-300 active:bg-signal-500 shadow-[0_1px_0_0_rgba(255,255,255,0.25)_inset,0_12px_30px_-12px_rgba(56,189,248,0.55)]',
+    'surface-accent shadow-[0_1px_0_0_rgba(255,255,255,0.25)_inset,0_12px_30px_-12px_rgba(56,189,248,0.55)]',
   secondary:
     'border border-line bg-ink-800/60 text-fog-50 hover:border-fog-600 hover:bg-ink-700/70',
   ghost: 'text-fog-200 hover:text-fog-50 hover:bg-ink-800/70 border border-transparent',
   outlineSignal:
-    'border border-signal-400/40 text-signal-300 hover:border-signal-400 hover:bg-signal-400/10',
+    'text-accent border border-signal-400/40 hover:border-signal-400 hover:bg-signal-400/10',
 }
 
 const sizes = {
-  sm: 'h-9 px-4 text-[0.8125rem]',
-  md: 'h-11 px-6 text-sm',
-  lg: 'h-13 px-7 text-[0.9375rem]',
+  sm: 'h-9 px-4 text-sm',
+  md: 'h-11 px-6 text-[0.9375rem]',
+  lg: 'h-13 px-7 text-base',
 }
 
 const base =
-  'group relative inline-flex select-none items-center justify-center gap-2 rounded-lg font-medium tracking-tight transition-colors duration-200 disabled:pointer-events-none disabled:opacity-45'
+  'group relative inline-flex select-none items-center justify-center gap-2 rounded-lg font-semibold tracking-tight transition-colors duration-200 disabled:pointer-events-none disabled:opacity-45'
 
 /**
  * One button component that renders an <a>, a react-router <Link> or a

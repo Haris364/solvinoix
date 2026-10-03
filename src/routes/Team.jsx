@@ -1,86 +1,67 @@
-import { useState } from 'react'
-import { TeamCard } from '../components/team/TeamCard'
-import { TeamModal } from '../components/team/TeamModal'
-import { PageBackdrop } from '../components/ui/PageBackdrop'
-import { Eyebrow } from '../components/ui/Eyebrow'
-import { Section, RevealGroup, RevealItem } from '../components/ui/Reveal'
-import { Button } from '../components/ui/Button'
-import { Icon } from '../components/ui/IconBox'
+import { ArrowLink } from '../components/ui/ArrowLink'
+import { PageHeader } from '../components/ui/PageHeader'
+import { PageClose } from '../components/common/KeyLines'
+import { MemberProfile } from '../components/team/MemberProfile'
+import { Section, Reveal } from '../components/ui/Reveal'
+import { SectionHeader } from '../components/common/SectionHeader'
+import { teamPage } from '../data/content'
 import { teamMembers } from '../data/team'
-import { site } from '../data/site'
+import { usePageTitle } from '../lib/usePageTitle'
 
 /**
- * Team page. The grid renders whatever is in src/data/team.js, so adding or
- * removing a member never requires touching this file.
+ * /team — the people responsible for delivery.
+ *
+ * The page states its own editorial policy, because for a company without a
+ * large published team the absence of credentials is conspicuous and should be
+ * explained rather than left to look like an omission. Names, roles and
+ * specialisations are published because they are agreed; anything unverified is
+ * left out rather than approximated.
  */
 export function Team() {
-  const [selected, setSelected] = useState(null)
+  usePageTitle(teamPage.title, teamPage.description)
 
   return (
     <>
-      <PageBackdrop>
-        <div className="max-w-3xl">
-          <Eyebrow>Our Team</Eyebrow>
-          <h1 className="mt-5 text-4xl font-semibold leading-[1.06] text-fog-50 sm:text-5xl lg:text-6xl">
-            Meet the Team Behind <span className="text-gradient">Solvionix</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-fog-400 sm:text-lg">
-            People, technology and ideas working together to solve real business problems.
-          </p>
-        </div>
-      </PageBackdrop>
+      <PageHeader title={teamPage.title} description={teamPage.description} />
 
       <Section>
         <div className="container-page">
-          <RevealGroup className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {teamMembers.map((member) => (
-              <RevealItem key={member.id}>
-                <TeamCard member={member} onViewProfile={setSelected} />
-              </RevealItem>
-            ))}
-          </RevealGroup>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
+            <SectionHeader eyebrow="Editorial policy" title={teamPage.note.title} />
+            <Reveal delay={0.1} className="lg:pt-16">
+              <p className="font-semibold type-body text-fog-200">{teamPage.note.body}</p>
+            </Reveal>
+          </div>
 
-          <p className="mt-8 max-w-2xl text-sm leading-relaxed text-fog-600">
-            Profiles are published as the team grows. Anyone shown here is a real member of
-            Solvionix — no placeholder identities are presented as staff.
-          </p>
+          <div className="mt-16 space-y-16">
+            {teamMembers.map((member) => (
+              <MemberProfile key={member.id} member={member} />
+            ))}
+          </div>
         </div>
       </Section>
 
       <Section tone="raised">
         <div className="container-page">
-          <div className="relative overflow-hidden rounded-2xl border border-line bg-ink-900/60 p-8 sm:p-12">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -top-24 -right-16 size-72 rounded-full bg-signal-500/10 blur-[100px]"
-            />
-
-            <div className="relative max-w-2xl">
-              <Eyebrow>Work with us</Eyebrow>
-              <h2 className="mt-5 text-2xl font-semibold text-fog-50 sm:text-3xl lg:text-4xl">
-                Tell us what is not working in your business.
-              </h2>
-              <p className="mt-4 text-[0.9375rem] leading-relaxed text-fog-400 sm:text-base">
-                {site.name} works directly with the people who build the solution. You get a
-                clear point of contact, an honest assessment of the problem, and a plan you can
-                read before anything is built.
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button to="/contact" size="lg">
-                  Start a Project
-                  <Icon name="ArrowRight" className="size-4" strokeWidth={2} />
-                </Button>
-                <Button to="/process" variant="secondary" size="lg">
-                  How We Work
-                </Button>
-              </div>
-            </div>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
+            <SectionHeader eyebrow="Engagement" title={teamPage.closing.title} />
+            <Reveal delay={0.1} className="lg:pt-16">
+              <p className="font-semibold type-body text-fog-200">{teamPage.closing.body}</p>
+            </Reveal>
           </div>
+
+          <PageClose
+            className="mt-16"
+            title="How the work is organised"
+            body="The delivery lifecycle, the company structure and the direction are all on the company page."
+            link={
+              <ArrowLink to="/company" className="font-semibold text-[1.0625rem]">
+                About the company
+              </ArrowLink>
+            }
+          />
         </div>
       </Section>
-
-      <TeamModal member={selected} onClose={() => setSelected(null)} />
     </>
   )
 }

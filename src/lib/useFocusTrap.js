@@ -12,9 +12,18 @@ const FOCUSABLE = [
 /**
  * Traps Tab focus inside `containerRef` while `active`, closes on Escape, and
  * restores focus to the previously focused element on close.
+ *
+ * `onClose` is held in a ref rather than an effect dependency, so passing a
+ * fresh inline arrow function on every render does not tear the trap down and
+ * re-grab focus mid-interaction.
  */
 export function useFocusTrap(containerRef, active, onClose) {
   const previouslyFocused = useRef(null)
+  const closeRef = useRef(onClose)
+
+  useEffect(() => {
+    closeRef.current = onClose
+  }, [onClose])
 
   useEffect(() => {
     if (!active) return undefined
@@ -31,7 +40,7 @@ export function useFocusTrap(containerRef, active, onClose) {
     const onKeyDown = (event) => {
       if (event.key === 'Escape') {
         event.stopPropagation()
-        onClose?.()
+        closeRef.current?.()
         return
       }
 
@@ -65,7 +74,7 @@ export function useFocusTrap(containerRef, active, onClose) {
       const target = previouslyFocused.current
       if (target && typeof target.focus === 'function') target.focus()
     }
-  }, [active, containerRef, onClose])
+  }, [active, containerRef])
 }
 
 export default useFocusTrap
